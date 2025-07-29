@@ -20,8 +20,8 @@ services:
       - |
         pip install --upgrade pip
         pip install -r requirements.txt
-        python -c "from main import db; db.create_all()"  # ✅ Create tables
-        python main.py  # ✅ Start Flask app
+        flask db upgrade || python -c "from app import db, app; app.app_context().push(); db.create_all()"
+        python main.py
 
   db:
     image: postgres:16
