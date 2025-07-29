@@ -13,14 +13,15 @@ services:
       - db
     environment:
       - SECRET_KEY
-      - DATABASE_URL
+      - DATABASE_URL=postgresql://myuser:mypass@db:5432/mydb
     command:
       - sh
       - -c
       - |
         pip install --upgrade pip
         pip install -r requirements.txt
-        python main.py
+        python -c "from main import db; db.create_all()"  # ✅ Create tables
+        python main.py  # ✅ Start Flask app
 
   db:
     image: postgres:16
