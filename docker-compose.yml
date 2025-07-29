@@ -35,7 +35,7 @@ services:
     image: nginx:alpine
     container_name: nginx_proxy
     ports:
-      - "80:80"
+      - "8000:80"
     depends_on:
       - web
     volumes:
