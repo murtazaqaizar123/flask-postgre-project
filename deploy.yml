@@ -1,3 +1,4 @@
+---
 - name: Deploy to Production
   hosts: localhost
   become: true
@@ -11,19 +12,31 @@
         update_cache: true
         cache_valid_time: 3600
 
-    - name: install docker and docker compose
+    - name: Install curl
       apt:
-        name: 
-          - docker.io
-          - docker-compose
+        name: curl
+        state: present
 
-    - name: ensure docker is running
+    - name: Install Docker using official convenience script
+      shell: |
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sh get-docker.sh
+      args:
+        creates: /usr/bin/docker
+
+    - name: Install Docker Compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.24.2/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+
+    - name: Ensure Docker is running
       systemd:
         name: docker
         state: started
         enabled: true 
 
-    - name: ensure docker compose is running
+    - name: Run Docker Compose
       command: docker-compose up -d
       args:
         chdir: "{{ project_dir }}"
