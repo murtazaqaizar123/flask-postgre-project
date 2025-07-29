@@ -1,0 +1,29 @@
+- name: Deploy to Production
+  hosts: localhost
+  become: true
+
+  vars: 
+    project_dir: /var/lib/jenkins/workspace/flask-postgre-project
+
+  tasks:
+    - name: Ensure APT cache is updated
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: install docker and docker compose
+      apt:
+        name: 
+          - docker.io
+          - docker-compose
+
+    - name: ensure docker is running
+      systemd:
+        name: docker
+        state: started
+        enabled: true 
+
+    - name: ensure docker compose is running
+      command: docker-compose up -d
+      args:
+        chdir: "{{ project_dir }}"
