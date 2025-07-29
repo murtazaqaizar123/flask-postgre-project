@@ -12,8 +12,8 @@ services:
     depends_on:
       - db
     environment:
-      - SECRET_KEY=${SECRET_KEY}
-      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY
+      - DATABASE_URL
     command:
       - sh
       - -c
